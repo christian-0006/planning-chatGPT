@@ -1,16 +1,34 @@
-<!-- Fichier : app/views/login.php -->
+<?php
+// login.php
+?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<?= $_SESSION['lang'] ?? 'fr' ?>">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($lang['login_title'] ?? 'Connexion') ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
-    <form method="POST" class="p-4 bg-white rounded shadow" style="width:300px;">
-        <h4 class="mb-3 text-center">Entrez votre email</h4>
-        <input type="email" name="email" class="form-control mb-3" placeholder="exemple@domaine.com" required>
-        <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+<body>
+
+<?php include APPROOT . '/views/partials/header.php'; ?>
+
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4"><?= htmlspecialchars($lang['login_heading'] ?? 'Se connecter') ?></h2>
+
+    <form method="POST" action="">
+        <div class="mb-3">
+            <label for="email" class="form-label"><?= htmlspecialchars($lang['login_email'] ?? 'Email') ?></label>
+            <input type="email" name="email" id="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label"><?= htmlspecialchars($lang['login_password'] ?? 'Password') ?></label>
+            <input type="password" name="password" id="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100"><?= htmlspecialchars($lang['login_button'] ?? 'Connexion') ?></button>
     </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

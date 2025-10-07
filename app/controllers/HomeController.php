@@ -1,28 +1,41 @@
 <?php
-// Fichier : app/controllers/HomeController.php
+require_once APPROOT . '/core/Language.php';
 
 class HomeController {
+
     public function login() {
-        // Si le formulaire est soumis
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['email'] = $_POST['email'] ?? '';
             header("Location: ?page=home");
             exit;
         }
 
-        // Sinon on affiche la page de login
+        // Charge la langue et expose $lang à la vue
+        $lang = Language::load();
         require_once APPROOT . '/views/login.php';
     }
 
     public function index() {
-        // Vérifie si l'email est bien en session
         if (!isset($_SESSION['email'])) {
             header("Location: ?page=login");
             exit;
         }
 
         $email = $_SESSION['email'];
+
+        // Charge la langue et expose $lang à la vue
+        $lang = Language::load();
         require_once APPROOT . '/views/home.php';
     }
+
+    public function changeLang() {
+        if (isset($_GET['lang'])) {
+            $_SESSION['lang'] = $_GET['lang'];
+        }
+
+        // Redirection vers la page précédente
+        $previous = $_SERVER['HTTP_REFERER'] ?? '?page=home';
+        header("Location: $previous");
+        exit;
+    }
 }
-?>
