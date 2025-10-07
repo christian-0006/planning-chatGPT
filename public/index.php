@@ -1,8 +1,11 @@
 <?php
-// Fichier : public/index.php
-require_once '../config/config.php';
-require_once '../app/core/App.php';
+session_start();
 
-// Lance l'application
+// Définir APPROOT
+define('APPROOT', dirname(__DIR__) . '/app');
+
+// Charger l’autoloader
+require_once APPROOT . '/core/Autoload.php';
+
+// Instancier l’application
 $app = new App();
-?>
