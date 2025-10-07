@@ -1,0 +1,22 @@
+# Sessions et logs PHP
+*.log
+*.session
+
+# Fichiers temporaires
+*.tmp
+*.swp
+*.bak
+
+# Cache et fichiers système
+cache/
+tmp/
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Composer / vendor
+/vendor/
