@@ -1,12 +1,11 @@
 <?php
-// Fichier : public/index.php
-require_once '../config/config.php';
-require_once '../app/core/App.php';
+session_start();
 
-//langue
-require_once '../app/core/Language.php';
-Language::load();
+// Définir APPROOT
+define('APPROOT', dirname(__DIR__) . '/app');
 
-// Lance l'application
+// Charger l’autoloader
+require_once APPROOT . '/core/Autoload.php';
+
+// Instancier l’application
 $app = new App();
-?>
