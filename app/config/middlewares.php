@@ -1,8 +1,7 @@
 <?php
+// 🔹 Liste des middlewares à exécuter (ordre = ordre d'exécution)
 return [
-    // Ordre d'exécution des middlewares
     'LoggingMiddleware',
     'LanguageMiddleware',
-    'AuthMiddleware',
-    // Tu peux ajouter d'autres middlewares ici
+    'AuthMiddleware'
 ];

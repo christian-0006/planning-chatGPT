@@ -1,14 +1,16 @@
 <?php
-// app/core/middleware/LanguageMiddleware.php
-require_once APPROOT . '/core/Language.php';
-require_once APPROOT . '/core/MiddlewareInterface.php';
+namespace Core\Middleware;
 
+use Core\Language;
+use Core\MiddlewareInterface;
+
+/**
+ * 🔹 Middleware pour charger la langue depuis la session
+ */
 class LanguageMiddleware implements MiddlewareInterface {
     public function handle(): bool {
-        // Charge la langue
+        // Charger la langue (retourne un tableau)
         Language::load();
-
-        // Toujours continuer la requête
         return true;
     }
 }

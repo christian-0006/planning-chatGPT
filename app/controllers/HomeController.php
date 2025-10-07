@@ -1,41 +1,39 @@
 <?php
-require_once APPROOT . '/core/Language.php';
+namespace Controllers;
 
 class HomeController {
-
-    public function login() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $_SESSION['email'] = $_POST['email'] ?? '';
-            header("Location: ?page=home");
-            exit;
-        }
-
-        // Charge la langue et expose $lang à la vue
-        $lang = Language::load();
-        require_once APPROOT . '/views/login.php';
+    public function index() {
+        require __DIR__ . '/../views/home.php';
     }
 
-    public function index() {
-        if (!isset($_SESSION['email'])) {
-            header("Location: ?page=login");
-            exit;
+    public function login() {
+        // Traitement du formulaire login
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'] ?? null;
+            if ($email) {
+                $_SESSION['email'] = $email;
+                header("Location: ?page=home");
+                exit;
+            }
         }
-
-        $email = $_SESSION['email'];
-
-        // Charge la langue et expose $lang à la vue
-        $lang = Language::load();
-        require_once APPROOT . '/views/home.php';
+        require __DIR__ . '/../views/login.php';
     }
 
     public function changeLang() {
-        if (isset($_GET['lang'])) {
-            $_SESSION['lang'] = $_GET['lang'];
-        }
+        $lang = $_GET['lang'] ?? 'fr';
+        $_SESSION['lang'] = $lang;
 
-        // Redirection vers la page précédente
-        $previous = $_SERVER['HTTP_REFERER'] ?? '?page=home';
-        header("Location: $previous");
+        // 🔹 Retour à la page précédente (login ou home)
+        $back = $_SERVER['HTTP_REFERER'] ?? '?page=login';
+        header("Location: $back");
+        exit;
+    }
+
+    // 🔹 Méthode logout
+    public function logout() {
+        session_unset();
+        session_destroy();
+        header("Location: ?page=login");
         exit;
     }
 }

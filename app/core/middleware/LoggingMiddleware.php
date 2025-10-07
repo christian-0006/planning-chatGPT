@@ -1,13 +1,17 @@
 <?php
-// app/core/middleware/LoggingMiddleware.php
-require_once APPROOT . '/core/MiddlewareInterface.php';
+namespace Core\Middleware;
 
+use Core\MiddlewareInterface;
+
+/**
+ * 🔹 Middleware pour enregistrer chaque requête dans un fichier log
+ */
 class LoggingMiddleware implements MiddlewareInterface {
     public function handle(): bool {
-        $logDir = APPROOT . '/logs';
-        if (!is_dir($logDir)) {
-            mkdir($logDir, 0755, true);
-        }
+        $logDir = __DIR__ . '/../../logs';
+
+        // Créer le dossier logs si nécessaire
+        if (!is_dir($logDir)) mkdir($logDir, 0755, true);
 
         $logFile = $logDir . '/requests.log';
 
@@ -20,7 +24,6 @@ class LoggingMiddleware implements MiddlewareInterface {
 
         file_put_contents($logFile, $line, FILE_APPEND);
 
-        // Toujours continuer la requête
         return true;
     }
 }

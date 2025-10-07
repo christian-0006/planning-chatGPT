@@ -1,4 +1,6 @@
 <?php
+namespace Core;
+
 class App {
     protected $controller = 'HomeController';
     protected $method = 'index';
@@ -7,6 +9,7 @@ class App {
     public function __construct() {
         $page = $_GET['page'] ?? 'home';
 
+        // Définir la méthode à appeler selon la page
         switch ($page) {
             case 'login':
                 $this->method = 'login';
@@ -14,21 +17,27 @@ class App {
             case 'changeLang':
                 $this->method = 'changeLang';
                 break;
+            case 'logout':
+                $this->method = 'logout';
+                break;
             default:
                 $this->method = 'index';
                 break;
         }
 
-        $controller = new $this->controller;
+        // Instancier le contrôleur
+        $controllerClass = "Controllers\\{$this->controller}";
+        $controller = new $controllerClass();
 
-        // 🔹 Charger la configuration des middlewares
-        $middlewareClasses = require APPROOT . '/config/middlewares.php';
+        // Charger les middlewares depuis la config
+        $middlewareClasses = require __DIR__ . '/../config/middlewares.php';
 
         foreach ($middlewareClasses as $class) {
-            if (class_exists($class)) {
-                $this->middlewares[] = new $class();
+            $namespacedClass = "Core\\Middleware\\$class";
+            if (class_exists($namespacedClass)) {
+                $this->middlewares[] = new $namespacedClass();
             } else {
-                throw new Exception("Middleware $class introuvable !");
+                throw new \Exception("Middleware $namespacedClass introuvable !");
             }
         }
 

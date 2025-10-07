@@ -1,25 +1,42 @@
 <?php
-// home.php
+use Core\Language;
+
+$lang = Language::load();
+$email = $_SESSION['email'] ?? null;
 ?>
+
 <!DOCTYPE html>
-<html lang="<?= $_SESSION['lang'] ?? 'fr' ?>">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($lang['home_title'] ?? 'Accueil') ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Accueil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="container mt-5">
 
-<?php include APPROOT . '/views/partials/header.php'; ?>
+    <h1><?= $lang['hello'] ?> !</h1>
 
-<div class="container text-center mt-5">
-    <h1><?= htmlspecialchars($lang['home_welcome'] ?? 'Bienvenue') ?></h1>
-    <p class="lead"><?= htmlspecialchars($lang['home_description'] ?? '') ?></p>
-    <p><?= htmlspecialchars($lang['email_received'] ?? 'J’ai bien reçu votre email :') ?> <strong><?= htmlspecialchars($email) ?></strong></p>
-    <a href="?page=login" class="btn btn-secondary"><?= htmlspecialchars($lang['change_email'] ?? 'Changer d\'email') ?></a>
-</div>
+    <?php if ($email): ?>
+        <p><?= $lang['email_received'] ?> <?= htmlspecialchars($email) ?></p>
+    <?php else: ?>
+        <p>Utilisateur non connecté.</p>
+    <?php endif; ?>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bouton Déconnexion -->
+    <div class="mt-3">
+        <a href="?page=logout" class="btn btn-danger">Déconnexion</a>
+    </div>
+
+    <!-- Sélecteur de langue -->
+    <div class="mt-3">
+        <span>Langue : </span>
+        <a href="?page=changeLang&lang=fr">
+            <img src="https://flagcdn.com/16x12/fr.png" alt="FR" class="me-1">
+        </a>
+        <a href="?page=changeLang&lang=en">
+            <img src="https://flagcdn.com/16x12/gb.png" alt="EN">
+        </a>
+    </div>
+
 </body>
 </html>

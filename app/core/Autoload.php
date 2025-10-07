@@ -1,21 +1,18 @@
 <?php
-// app/core/Autoload.php
+// 🔹 Autoloader PSR-4 simple
 spl_autoload_register(function($className) {
-    // Remplacer les backslashes par des slashs
+    // Transformer les backslashes du namespace en slash pour correspondre au chemin fichier
     $className = str_replace('\\', '/', $className);
 
-    $paths = [
-        APPROOT . '/core/' . $className . '.php',          // Core (App.php, Language.php)
-        APPROOT . '/core/middleware/' . $className . '.php', // Middlewares
-        APPROOT . '/controllers/' . $className . '.php',     // Contrôleurs
-    ];
+    // Construire le chemin complet du fichier
+    $file = APPROOT . '/' . $className . '.php';
 
-    foreach ($paths as $path) {
-        if (file_exists($path)) {
-            require_once $path;
-            return;
-        }
+    // Vérifier si le fichier existe et le charger
+    if (file_exists($file)) {
+        require_once $file;
+        return;
     }
 
+    // Si le fichier n'existe pas, lancer une exception
     throw new Exception("Classe $className introuvable.");
 });

@@ -1,15 +1,23 @@
 <?php
-// app/core/middleware/AuthMiddleware.php
-require_once APPROOT . '/core/MiddlewareInterface.php';
+namespace Core\Middleware;
 
+use Core\MiddlewareInterface;
+
+/**
+ * 🔹 Middleware pour vérifier si l'utilisateur est connecté
+ */
 class AuthMiddleware implements MiddlewareInterface {
     public function handle(): bool {
-        // Si l’utilisateur n’est pas connecté et n’est pas sur login, on stop et redirige
         $page = $_GET['page'] ?? 'home';
-        if (!isset($_SESSION['email']) && $page !== 'login') {
+
+        // Si l'utilisateur n'est pas connecté et qu'il n'est pas sur la page login
+        // 🔹 Autoriser login et changement de langue même si non connecté
+        $allowedPages = ['login', 'changeLang'];
+        if (!isset($_SESSION['email']) && !in_array($page, $allowedPages)) {
             header("Location: ?page=login");
-            exit;
+            exit; // Bloquer la requête
         }
-        return true;
+
+        return true; // Continuer sinon
     }
 }
