@@ -14,29 +14,54 @@ $email = $_SESSION['email'] ?? null;
 </head>
 <body class="container mt-5">
 
-    <h1><?= $lang['hello'] ?> !</h1>
+<h1 id="home-title"><?= $lang['hello'] ?> !</h1>
 
-    <?php if ($email): ?>
-        <p><?= $lang['email_received'] ?> <?= htmlspecialchars($email) ?></p>
-    <?php else: ?>
-        <p>Utilisateur non connecté.</p>
-    <?php endif; ?>
+<?php if ($email): ?>
+    <p id="email-display" data-email="<?= htmlspecialchars($email) ?>">
+        <?= $lang['email_received'] ?> <?= htmlspecialchars($email) ?>
+    </p>
+<?php else: ?>
+    <p>Utilisateur non connecté.</p>
+<?php endif; ?>
 
-    <!-- Bouton Déconnexion -->
-    <div class="mt-3">
-        <a href="?page=logout" class="btn btn-danger">Déconnexion</a>
-    </div>
+<!-- Bouton Déconnexion -->
+<div class="mt-3">
+    <a href="?page=logout" class="btn btn-danger">Déconnexion</a>
+</div>
 
-    <!-- Sélecteur de langue -->
-    <div class="mt-3">
-        <span>Langue : </span>
-        <a href="?page=changeLang&lang=fr">
-            <img src="https://flagcdn.com/16x12/fr.png" alt="FR" class="me-1">
-        </a>
-        <a href="?page=changeLang&lang=en">
-            <img src="https://flagcdn.com/16x12/gb.png" alt="EN">
-        </a>
-    </div>
+<!-- Sélecteur de langue -->
+<div class="mt-3">
+    <span>Langue : </span>
+    <a href="#" data-lang="fr" class="lang-switch">
+        <img src="https://flagcdn.com/16x12/fr.png" alt="FR" class="me-1">
+    </a>
+    <a href="#" data-lang="en" class="lang-switch">
+        <img src="https://flagcdn.com/16x12/gb.png" alt="EN">
+    </a>
+</div>
+
+<script>
+// Changement de langue instantané
+document.querySelectorAll('.lang-switch').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const lang = this.getAttribute('data-lang');
+
+        fetch(`?page=changeLang&lang=${lang}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.querySelector('#home-title').textContent = data['hello'] + ' !';
+            const emailElem = document.querySelector('#email-display');
+            if(emailElem) {
+                emailElem.textContent = data['email_received'] + ' ' + emailElem.dataset.email;
+            }
+        })
+        .catch(err => console.error(err));
+    });
+});
+</script>
 
 </body>
 </html>

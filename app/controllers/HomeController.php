@@ -23,7 +23,17 @@ class HomeController {
         $lang = $_GET['lang'] ?? 'fr';
         $_SESSION['lang'] = $lang;
 
-        // 🔹 Retour à la page précédente (login ou home)
+        // Vérifier si c'est une requête AJAX
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            // Charger les traductions et renvoyer en JSON
+            $translations = \Core\Language::load();
+            header('Content-Type: application/json');
+            echo json_encode($translations);
+            exit;
+        }
+
+        // Sinon redirection classique
         $back = $_SERVER['HTTP_REFERER'] ?? '?page=login';
         header("Location: $back");
         exit;

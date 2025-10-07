@@ -13,26 +13,48 @@ $lang = Language::load();
 </head>
 <body class="container mt-5">
 
-    <h1><?= $lang['login_submit'] ?></h1>
+<h1 id="login-title"><?= $lang['login_submit'] ?></h1>
 
-    <form method="post" action="?page=login">
-        <div class="mb-3">
-            <label for="email" class="form-label"><?= $lang['login_email'] ?></label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <button type="submit" class="btn btn-primary"><?= $lang['login_submit'] ?></button>
-    </form>
-
-    <!-- Sélecteur de langue -->
-    <div class="mt-3">
-        <span>Langue : </span>
-        <a href="?page=changeLang&lang=fr">
-            <img src="https://flagcdn.com/16x12/fr.png" alt="FR" class="me-1">
-        </a>
-        <a href="?page=changeLang&lang=en">
-            <img src="https://flagcdn.com/16x12/gb.png" alt="EN">
-        </a>
+<!-- Formulaire login -->
+<form method="post" action="?page=login">
+    <div class="mb-3">
+        <label for="email" class="form-label"><?= $lang['login_email'] ?></label>
+        <input type="email" class="form-control" id="email" name="email" required>
     </div>
+    <button type="submit" class="btn btn-primary"><?= $lang['login_submit'] ?></button>
+</form>
+
+<!-- Sélecteur de langue -->
+<div class="mt-3">
+    <span>Langue : </span>
+    <a href="#" data-lang="fr" class="lang-switch">
+        <img src="https://flagcdn.com/16x12/fr.png" alt="FR" class="me-1">
+    </a>
+    <a href="#" data-lang="en" class="lang-switch">
+        <img src="https://flagcdn.com/16x12/gb.png" alt="EN">
+    </a>
+</div>
+
+<script>
+// Gestion du changement de langue sans reload
+document.querySelectorAll('.lang-switch').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const lang = this.getAttribute('data-lang');
+
+        fetch(`?page=changeLang&lang=${lang}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.querySelector('#login-title').textContent = data['login_submit'];
+            document.querySelector('label[for="email"]').textContent = data['login_email'];
+            document.querySelector('button[type="submit"]').textContent = data['login_submit'];
+        })
+        .catch(err => console.error(err));
+    });
+});
+</script>
 
 </body>
 </html>
