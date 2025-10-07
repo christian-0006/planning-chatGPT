@@ -3,6 +3,7 @@
 class App {
     protected $controller = 'HomeController';
     protected $method = 'index';
+    protected $middlewares = [];
 
     public function __construct() {
         // Si une action est passée dans l’URL (ex: ?page=login)
@@ -16,13 +17,27 @@ class App {
             $this->method = 'changeLang';
         }
 
-        //On charge la langue
-        require_once APPROOT . '/core/Language.php';
-        Language::load();
-        
         // On charge le contrôleur
         require_once APPROOT . '/controllers/' . $this->controller . '.php';
         $controller = new $this->controller;
+
+        // 🔹 Inclure les middlewares
+        require_once APPROOT . '/core/middleware/LanguageMiddleware.php';
+        require_once APPROOT . '/core/middleware/AuthMiddleware.php';
+
+        // 🔹 Ajouter les middlewares ici
+        $this->middlewares = [
+            new LanguageMiddleware(),
+            new AuthMiddleware()
+        ];
+
+        // Exécuter tous les middlewares
+        foreach ($this->middlewares as $middleware) {
+            if (!$middleware->handle()) {
+                // Si un middleware renvoie false, on stop la requête
+                return;
+            }
+        }
 
         // Appel de la méthode correspondante
         call_user_func([$controller, $this->method]);
