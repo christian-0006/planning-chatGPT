@@ -8,15 +8,21 @@ class HomeController {
 
     public function login() {
         // Traitement du formulaire login
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? null;
-            if ($email) {
-                $_SESSION['email'] = $email;
-                header("Location: ?page=home");
-                exit;
-            }
+        // Vérification CSRF
+        if (!isset($_POST['csrf']) || !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
+            die("Erreur de sécurité : CSRF token invalide.");
         }
-        require __DIR__ . '/../views/login.php';
+
+        // Validation de l'email
+        $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+        if (!$email) {
+            die("Adresse email invalide.");
+        }
+
+        // Stocker l'email validé en session
+        $_SESSION['email'] = $email;
+        header("Location: /home");
+        exit;
     }
 
     public function changeLang() {

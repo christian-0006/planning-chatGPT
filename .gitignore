@@ -1,22 +1,51 @@
-# Sessions et logs PHP
+# --------------------------
+# Logs et sessions PHP
+# --------------------------
 *.log
 *.session
 
+# --------------------------
 # Fichiers temporaires
+# --------------------------
 *.tmp
 *.swp
 *.bak
 
-# Cache et fichiers système
+# Dossiers temporaires
 cache/
 tmp/
+uploads/temp/
+
+# --------------------------
+# Fichiers système
+# --------------------------
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# IDEs
+# --------------------------
+# IDEs / éditeurs
+# --------------------------
 .idea/
 .vscode/
 *.iml
+*.sublime-workspace
+*.sublime-project
 
-# Composer / vendor
-/vendor/
+# --------------------------
+# Composer / dépendances
+# --------------------------
+vendor/
+composer.lock
+
+# --------------------------
+# Node / front-end (si utilisé)
+# --------------------------
+node_modules/
+dist/
+.env
+
+# --------------------------
+# Autres fichiers sensibles
+# --------------------------
+config/config.local.php

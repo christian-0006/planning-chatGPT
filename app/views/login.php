@@ -21,6 +21,7 @@ $lang = Language::load();
         <label for="email" class="form-label"><?= $lang['login_email'] ?></label>
         <input type="email" class="form-control" id="email" name="email" required>
     </div>
+    <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
     <button type="submit" class="btn btn-primary"><?= $lang['login_submit'] ?></button>
 </form>
 
